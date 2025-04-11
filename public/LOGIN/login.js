@@ -1,3 +1,4 @@
+// login.js
 function togglePassword(fieldId) {
     const passwordField = document.getElementById(fieldId);
     const eyeIcon = passwordField.nextElementSibling;
@@ -38,10 +39,12 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
     successMessage.textContent = "";
     successMessage.style.display = "none";
 
+    // Determine API base URL based on environment
+    const API_BASE_URL = window.location.hostname === 'localhost' 
+        ? 'http://localhost:5005'
+        : 'https://icb-admin-panel-website-projectsvercel-lb0t7hchw.vercel.app';
+
     try {
-        // Use the centralized config for API URL
-        const API_BASE_URL = window.APP_CONFIG ? window.APP_CONFIG.API_BASE_URL : 'https://icb-tracking-website.vercel.app';
-        
         const response = await fetch(`${API_BASE_URL}/api/login`, {
             method: 'POST',
             headers: {
@@ -62,10 +65,8 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
         successMessage.textContent = "Login successful! Redirecting...";
         successMessage.style.display = "block";
         
-        // Store user ID for later use
         localStorage.setItem('userId', userId);
         
-        // Redirect to welcome page after 1 second
         setTimeout(() => {
             window.location.href = "../index.html";
         }, 1000);
@@ -92,8 +93,13 @@ document.getElementById('resetPasswordForm').addEventListener('submit', async fu
         return;
     }
 
+    // Determine API base URL based on environment
+    const API_BASE_URL = window.location.hostname === 'localhost' 
+        ? 'http://localhost:5005'
+        : 'https://icb-admin-panel-website-projectsvercel-lb0t7hchw.vercel.app';
+
     try {
-        const response = await fetch('https://icb-tracking-website.vercel.app/api/reset-password', {
+        const response = await fetch(`${API_BASE_URL}/api/reset-password`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -113,7 +119,6 @@ document.getElementById('resetPasswordForm').addEventListener('submit', async fu
         successMessage.textContent = "Password reset successfully!";
         successMessage.style.display = "block";
         
-        // Clear form and close modal after 2 seconds
         setTimeout(() => {
             document.getElementById("resetPasswordForm").reset();
             closeModal();
